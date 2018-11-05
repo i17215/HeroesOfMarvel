@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3DAABBE1A04A6A69175DAE44 /* Pods_HeroesOfMarvelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA6951B50C463066638DCEF /* Pods_HeroesOfMarvelTests.framework */; };
 		54FC02B6CC2D5ECA3E98C147 /* Pods_HeroesOfMarvel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAEDC7B19628E77C925E368 /* Pods_HeroesOfMarvel.framework */; };
+		90E1938221908BC1001A70C4 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E1938121908BC1001A70C4 /* Reachability.swift */; };
 		90F37108218EDF4A002284A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F37107218EDF4A002284A4 /* AppDelegate.swift */; };
 		90F3710A218EDF4A002284A4 /* ListOfHeroesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F37109218EDF4A002284A4 /* ListOfHeroesViewController.swift */; };
 		90F3710D218EDF4A002284A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90F3710B218EDF4A002284A4 /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 		2FA6951B50C463066638DCEF /* Pods_HeroesOfMarvelTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HeroesOfMarvelTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		654855240BC31855DF80CB09 /* Pods-HeroesOfMarvel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroesOfMarvel.release.xcconfig"; path = "Pods/Target Support Files/Pods-HeroesOfMarvel/Pods-HeroesOfMarvel.release.xcconfig"; sourceTree = "<group>"; };
 		6C49A22FD064E54A60B657F7 /* Pods-HeroesOfMarvel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroesOfMarvel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HeroesOfMarvel/Pods-HeroesOfMarvel.debug.xcconfig"; sourceTree = "<group>"; };
+		90E1938121908BC1001A70C4 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		90F37104218EDF4A002284A4 /* HeroesOfMarvel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeroesOfMarvel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90F37107218EDF4A002284A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		90F37109218EDF4A002284A4 /* ListOfHeroesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfHeroesViewController.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				90F3713A218EFABB002284A4 /* String + MD5.swift */,
+				90E1938121908BC1001A70C4 /* Reachability.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				90F3713B218EFABB002284A4 /* String + MD5.swift in Sources */,
 				90F3713D218EFD79002284A4 /* CodableResponses.swift in Sources */,
 				90F37138218EF93A002284A4 /* Marvel.swift in Sources */,
+				90E1938221908BC1001A70C4 /* Reachability.swift in Sources */,
 				90F37108218EDF4A002284A4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

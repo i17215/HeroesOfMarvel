@@ -17,20 +17,32 @@ class HeroDetailViewController: UIViewController {
     
     // MARK: - Properties
     private var hero: Hero?
+    private var coreDataHero: MarvelHero?
     
     // MARK: - Lifecircle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameLabel.text = hero?.name
-        
-        if hero?.description == "" {
-            descriptionText.text = "Description not available"
+        if hero != nil {
+            nameLabel.text = hero?.name
+            
+            if hero?.description == "" {
+                descriptionText.text = "Description not available"
+            } else {
+                descriptionText.text = hero?.description
+            }
+            
+            image.kf.setImage(with: hero?.thumbnail.url)
         } else {
-            descriptionText.text = hero?.description
+            image.image = UIImage(named: "placeholder")
+            nameLabel.text = coreDataHero?.heroName
+            
+            if coreDataHero?.heroStory == "" {
+                descriptionText.text = "Description not available"
+            } else {
+                descriptionText.text = coreDataHero?.heroStory
+            }
         }
-        
-        image.kf.setImage(with: hero?.thumbnail.url)
     }
 }
 
@@ -41,6 +53,15 @@ extension HeroDetailViewController {
         guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HeroDetailViewController") as? HeroDetailViewController else { fatalError("Unexpectedly failed getting ComicViewController from Storyboard") }
         
         vc.hero = hero
+        
+        return vc
+    }
+    
+    /// Function that instantiate view controller and get data for the properties
+    static func instantiate(coreDataHero: MarvelHero) -> HeroDetailViewController {
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HeroDetailViewController") as? HeroDetailViewController else { fatalError("Unexpectedly failed getting ComicViewController from Storyboard") }
+        
+        vc.coreDataHero = coreDataHero
         
         return vc
     }

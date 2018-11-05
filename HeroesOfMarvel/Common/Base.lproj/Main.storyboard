@@ -88,10 +88,10 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g31-Os-rwc">
-                                <rect key="frame" x="80" y="226" width="215" height="215"/>
+                                <rect key="frame" x="80" y="274.5" width="215" height="118"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="jYi-rZ-OZr">
-                                        <rect key="frame" x="87.5" y="87.5" width="40" height="40"/>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="jYi-rZ-OZr">
+                                        <rect key="frame" x="87.5" y="39" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="9gS-8H-Emd"/>
                                             <constraint firstAttribute="height" constant="40" id="IRN-hP-9HL"/>
@@ -99,7 +99,7 @@
                                         <color key="color" red="0.93725490199999995" green="0.039215686270000001" blue="0.039215686270000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </activityIndicatorView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDV-dc-EKZ">
-                                        <rect key="frame" x="16" y="178" width="183" height="21"/>
+                                        <rect key="frame" x="16" y="81" width="183" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -107,7 +107,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="g31-Os-rwc" secondAttribute="height" multiplier="1:1" id="0qF-zU-I38"/>
+                                    <constraint firstAttribute="width" secondItem="g31-Os-rwc" secondAttribute="height" multiplier="1:0.55" id="0qF-zU-I38"/>
                                     <constraint firstItem="jYi-rZ-OZr" firstAttribute="centerX" secondItem="g31-Os-rwc" secondAttribute="centerX" id="89t-vh-Ytj"/>
                                     <constraint firstAttribute="trailing" secondItem="BDV-dc-EKZ" secondAttribute="trailing" constant="16" id="9Op-4B-dr2"/>
                                     <constraint firstItem="jYi-rZ-OZr" firstAttribute="centerY" secondItem="g31-Os-rwc" secondAttribute="centerY" id="b1p-ca-oQB"/>

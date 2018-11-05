@@ -8,6 +8,7 @@
 
 import UIKit
 import Moya
+import CoreData
 
 class ListOfHeroesViewController: UIViewController {
     
@@ -17,30 +18,62 @@ class ListOfHeroesViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Properties
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    private var marvelHeroes = [MarvelHero]() // This Array used only when no network connection
     private var heroes = [Hero]()
     let provider = MoyaProvider<Marvel>()
+    
+    var coreDataIsEmpty: Bool {
+        do {
+            let context = appDelegate.persistentContainer.viewContext
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MarvelHero")
+            let count  = try context.count(for: request)
+            return count == 0 ? true : false
+        } catch {
+            return true
+        }
+    }
 
     // MARK: - Lifecircle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupActivityIndicator()
+        messageView.isHidden = true
         
-        provider.request(.getHeroes) { [weak self] result in
-            switch result {
-            case .success(let response):
-                do {
-                    let data = try response.map(MarvelResponse<Hero>.self).data.results
-                    self?.heroes = data
-                    self?.activityIndicator.stopAnimating()
-                    self?.messageView.isHidden = true
-                    self?.tableView.reloadData()
-                } catch let error {
+        if coreDataIsEmpty && Reachability.isConnectedToNetwork() == false {
+            let alertController = UIAlertController(title: "No network", message: "To continue using this app you need to check your internet connection", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "Ok", style: .default) { action in
+                self.messageView.isHidden = true
+            }
+
+            alertController.addAction(ok)
+            present(alertController, animated: true, completion: nil)
+        } else if !coreDataIsEmpty && Reachability.isConnectedToNetwork() == false {
+            presentDataAboutHeroFromCoreData()
+        } else {
+            setupActivityIndicator()
+            
+            provider.request(.getHeroes) { [weak self] result in
+                switch result {
+                case .success(let response):
+                    do {
+                        let data = try response.map(MarvelResponse<Hero>.self).data.results
+                        self?.heroes = data
+                        
+                        for hero in data[0..<10] {
+                            self?.saveHeroesWith(heroName: hero.name, heroStory: hero.description)
+                        }
+                        
+                        self?.activityIndicator.stopAnimating()
+                        self?.messageView.isHidden = true
+                        self?.tableView.reloadData()
+                    } catch let error {
+                        print(error)
+                    }
+                    
+                case .failure(let error):
                     print(error)
                 }
-                
-            case .failure(let error):
-                print(error)
             }
         }
     }
@@ -49,11 +82,42 @@ class ListOfHeroesViewController: UIViewController {
     
     /// Function that setup activity indicator and set it to message view
     private func setupActivityIndicator() {
+        messageView.isHidden = false
         activityIndicator.color = UIColor.red
         activityIndicator.hidesWhenStopped = true
         activityIndicator.center = messageView.center
         activityIndicator.startAnimating()
         self.messageView.addSubview(activityIndicator)
+    }
+    
+    /// Function that save information about marvel heroes in Core Data
+    private func saveHeroesWith(heroName: String, heroStory: String) {
+        let context = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "MarvelHero", in: context)
+        
+        let marvelHero = NSManagedObject(entity: entity!, insertInto: context) as! MarvelHero
+        marvelHero.heroName = heroName
+        marvelHero.heroStory = heroStory
+        
+        do {
+            try context.save()
+            marvelHeroes.append(marvelHero)
+            print("Data was saved correctly!")
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// Function that present data about marvel heroes that stored in Core Data
+    private func presentDataAboutHeroFromCoreData() {
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<MarvelHero> = MarvelHero.fetchRequest()
+        
+        do {
+            marvelHeroes = try context.fetch(fetchRequest)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 
@@ -65,13 +129,24 @@ extension ListOfHeroesViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return heroes.count
+        if Reachability.isConnectedToNetwork() == false {
+            return marvelHeroes.count
+        } else {
+            return heroes.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HeroTableViewCell.reuseIdentifier, for: indexPath) as? HeroTableViewCell ?? HeroTableViewCell()
         
-        cell.configureWith(heroes[indexPath.item])
+        if Reachability.isConnectedToNetwork() == false {
+            let hero = marvelHeroes[indexPath.item]
+            
+            cell.nameLabel.text = hero.heroName
+            cell.imageThumbnail.image = UIImage(named: "placeholder")
+        } else {
+            cell.configureWith(heroes[indexPath.item])
+        }
         
         return cell
     }
@@ -79,7 +154,12 @@ extension ListOfHeroesViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         
-        let heroDetailVC = HeroDetailViewController.instantiate(hero: heroes[indexPath.item])
-        navigationController?.pushViewController(heroDetailVC, animated: true)
+        if Reachability.isConnectedToNetwork() == false {
+            let heroDetailVC = HeroDetailViewController.instantiate(coreDataHero: marvelHeroes[indexPath.item])
+            navigationController?.pushViewController(heroDetailVC, animated: true)
+        } else {
+            let heroDetailVC = HeroDetailViewController.instantiate(hero: heroes[indexPath.item])
+            navigationController?.pushViewController(heroDetailVC, animated: true)
+        }
     }
 }
