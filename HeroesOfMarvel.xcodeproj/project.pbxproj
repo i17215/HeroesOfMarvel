@@ -128,12 +128,12 @@
 		90F37106218EDF4A002284A4 /* HeroesOfMarvel */ = {
 			isa = PBXGroup;
 			children = (
+				90594C06218F3AE5000F6E7E /* Common */,
 				90F3712D218EE5A3002284A4 /* Models */,
 				90F37130218EE9AA002284A4 /* Views */,
 				90F3712A218EE28B002284A4 /* Controllers */,
 				90F37136218EF924002284A4 /* Network */,
 				90F37139218EFAA3002284A4 /* Helpers */,
-				90594C06218F3AE5000F6E7E /* Common */,
 			);
 			path = HeroesOfMarvel;
 			sourceTree = "<group>";

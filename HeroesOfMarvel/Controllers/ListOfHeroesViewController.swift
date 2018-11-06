@@ -57,6 +57,11 @@ class ListOfHeroesViewController: UIViewController {
             provider.request(.getHeroes) { [weak self] result in
                 switch result {
                 case .success(let response):
+                    
+                    if !self!.coreDataIsEmpty {
+                        self!.deleteAllData("MarvelHero")
+                    }
+                    
                     do {
                         let data = try response.map(MarvelResponse<Hero>.self).data.results
                         self?.heroes = data
