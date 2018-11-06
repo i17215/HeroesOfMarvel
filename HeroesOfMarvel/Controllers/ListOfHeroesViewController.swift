@@ -19,7 +19,7 @@ class ListOfHeroesViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Properties
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var marvelHeroes = [MarvelHero]() // This Array used only when no network connection
     private var heroes = [Hero]()
     let provider = MoyaProvider<Marvel>()
@@ -120,7 +120,7 @@ class ListOfHeroesViewController: UIViewController {
     }
     
     /// Function that present data about marvel heroes that stored in Core Data
-    private func presentDataAboutHeroFromCoreData() {
+    func presentDataAboutHeroFromCoreData() {
         let context = appDelegate.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<MarvelHero> = MarvelHero.fetchRequest()
         
@@ -128,6 +128,22 @@ class ListOfHeroesViewController: UIViewController {
             marvelHeroes = try context.fetch(fetchRequest)
         } catch {
             print(error.localizedDescription)
+        }
+    }
+    
+    private func deleteAllData(_ entity: String) {
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        fetchRequest.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            for object in results {
+                guard let objectData = object as? NSManagedObject else {continue}
+                context.delete(objectData)
+            }
+        } catch let error {
+            print("Detele all data in \(entity) error :", error)
         }
     }
 }

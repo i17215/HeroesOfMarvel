@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import HeroesOfMarvel
+import CoreData
 
 class HeroesOfMarvelTests: XCTestCase {
     
@@ -24,7 +25,21 @@ class HeroesOfMarvelTests: XCTestCase {
     }
     
     /// Check entity in Core Data
-    func testIfCoreDataIsEmpty() {
-        XCTAssertTrue(!listOfHeroesViewController.coreDataIsEmpty)
+    func testCoreDataIsEmpty() {
+        XCTAssertTrue(listOfHeroesViewController.coreDataIsEmpty)
+    }
+    
+    /// Check how many objects in Core Data
+    func testCoreDataEntitiesCount() {
+        let context = listOfHeroesViewController.appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MarvelHero")
+        
+        do {
+            let count  = try context.count(for: request)
+            
+            XCTAssertEqual(10, count)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
