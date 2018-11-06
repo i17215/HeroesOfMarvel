@@ -9,6 +9,7 @@
 import UIKit
 import Moya
 import CoreData
+import Kingfisher
 
 class ListOfHeroesViewController: UIViewController {
     
@@ -19,7 +20,7 @@ class ListOfHeroesViewController: UIViewController {
     
     // MARK: - Properties
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    private var marvelHeroes = [MarvelHero]() // This Array used only when no network connection
+    var marvelHeroes = [MarvelHero]() // This Array used only when no network connection
     private var heroes = [Hero]()
     let provider = MoyaProvider<Marvel>()
     
@@ -61,7 +62,16 @@ class ListOfHeroesViewController: UIViewController {
                         self?.heroes = data
                         
                         for hero in data[0..<10] {
-                            self?.saveHeroesWith(heroName: hero.name, heroStory: hero.description)
+                            
+                            DispatchQueue.global().async {
+                                
+                                let imageUrl = hero.thumbnail.url
+                                let imageData = try? Data(contentsOf: imageUrl)
+                                
+                                DispatchQueue.main.async {
+                                    self?.saveHeroesWith(heroName: hero.name, heroStory: hero.description, thumbnail: imageData!)
+                                }
+                            }
                         }
                         
                         self?.activityIndicator.stopAnimating()
@@ -91,13 +101,14 @@ class ListOfHeroesViewController: UIViewController {
     }
     
     /// Function that save information about marvel heroes in Core Data
-    private func saveHeroesWith(heroName: String, heroStory: String) {
+    private func saveHeroesWith(heroName: String, heroStory: String, thumbnail: Data) {
         let context = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "MarvelHero", in: context)
         
         let marvelHero = NSManagedObject(entity: entity!, insertInto: context) as! MarvelHero
         marvelHero.heroName = heroName
         marvelHero.heroStory = heroStory
+        marvelHero.thumbnail = thumbnail
         
         do {
             try context.save()
@@ -143,7 +154,9 @@ extension ListOfHeroesViewController: UITableViewDelegate, UITableViewDataSource
             let hero = marvelHeroes[indexPath.item]
             
             cell.nameLabel.text = hero.heroName
-            cell.imageThumbnail.image = UIImage(named: "placeholder")
+            
+            let img = UIImage(data: hero.thumbnail!)
+            cell.imageThumbnail.image = img ?? UIImage(named: "placeholder")
         } else {
             cell.configureWith(heroes[indexPath.item])
         }
